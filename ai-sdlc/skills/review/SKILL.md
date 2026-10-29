@@ -1,6 +1,6 @@
 ---
 name: review
-description: Stage 5 of the AI SDLC. Final gate before implementation — rigorously review the intent, specs, design, and plan against each other and the codebase, resolve open questions with the user, and apply the approved fixes. Produces docs/ai-sdlc/<feature>/05-review.md.
+description: Stage 5 of the AI SDLC. Final gate before implementation — rigorously review the intent, specs, design, and plan against each other and the codebase, resolve open questions with the user, and apply the approved fixes directly to those documents. Produces no new file.
 argument-hint: "<feature slug>"
 disable-model-invocation: true
 ---
@@ -18,7 +18,8 @@ Be rigorous and specific. Don't praise, and don't pad.
 ## Preconditions
 
 - `01-intent.md` through `04-plan.md` exist in `docs/ai-sdlc/<slug>/`. If any is missing, stop and point the user at the missing stage.
-- If `05-review.md` already exists, this is a re-review: read it first, review everything afresh, and carry forward any findings still `Deferred` or `Rejected` so they aren't lost. Replace the file with the new review.
+- This stage writes no document of its own: findings are presented in the conversation and fixes go straight into the existing documents.
+- If `04-plan.md`'s `Decisions` section has an earlier `Review` entry, this is a re-review: read it, review everything afresh, and carry forward any findings still `Deferred` or `Rejected` so they aren't lost.
 
 ## 1. Load context
 
@@ -68,22 +69,9 @@ Check each document against the others and against the codebase.
 **Improvement opportunities**
 - Simpler designs, reuse of existing code, and scope that could be cut or deferred.
 
-## Template
-
-Template mode: **${user_config.template_mode}** (if this shows a `${user_config...}` placeholder or anything other than `guide` or `strict`, the option hasn't been set: use `guide`).
-
-Read [templates/review.md](templates/review.md) before writing, in either mode.
-
-- **guide** — use the template as a starting point. Add, merge, reorder, or leave out sections to suit the feature, but always keep:
-  - the header lines (`Slug`, `Verdict`, `Date`, `Reviewed`, `Source of truth consulted`)
-  - the approvals table
-  - the findings table with its columns, including `Outcome`
-  - the traceability gaps
-- **strict** — follow the template exactly: every section, in order, with its headings, tables, and ID formats. Where a section doesn't apply, keep the heading and write "Not applicable — <reason>".
-
 ## 3. Present findings
 
-Don't edit the stage documents yet. Write `docs/ai-sdlc/<slug>/05-review.md` following the Template section above, then present to the user:
+Don't edit any document yet, and don't write a review file. Present to the user in the conversation:
 
 1. **Verdict** (one line): `Ready` / `Ready with fixes` / `Not ready`.
    - **Ready** — no findings above Suggestion.
@@ -105,12 +93,13 @@ Then stop and wait for answers and for approval of the proposed fixes.
 
 Once the user has answered and approved:
 
-- Update only the affected documents, with minimal targeted edits that keep each document's structure and voice. Fix the same fact in every document that states it, so they stay consistent.
+- Update only the affected documents (`01-intent.md` to `04-plan.md`), with minimal targeted edits that keep each document's structure and voice. Fix the same fact in every document that states it, so they stay consistent.
 - Record the decisions in the `Decisions` section of the most relevant document, dated today.
 - Keep each edited document at `Status: Approved` — the user approved these edits as part of this review.
 - If the project's source-of-truth docs (`CLAUDE.md`, `AGENTS.md`, and the docs they point to) must change because of this feature, add those changes as plan tasks. Don't edit those files now unless the user says so.
 - If a finding needs a stage redone rather than patched, say which (e.g. `/ai-sdlc:design <slug>`) instead of rewriting it here.
-- Update `05-review.md`: mark each finding `Fixed`, `Deferred`, or `Rejected` with the reason, and set the final verdict.
+- Add one dated entry to the `Decisions` section of `04-plan.md`, headed `Review <today>`, with the final verdict and a line for every finding left `Deferred` or `Rejected` and why. Fixed findings need no entry beyond the decisions already recorded.
+- Don't create `05-review.md` or any other new file.
 - Don't commit.
 - Finish with `git diff --stat docs/ai-sdlc/<slug>/`, a summary of what changed in five bullets or fewer, and any findings left unresolved (deferred or rejected) with the reason.
 
