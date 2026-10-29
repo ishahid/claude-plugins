@@ -1,0 +1,22 @@
+{
+  "name": "ai-sdlc",
+  "version": "0.1.0",
+  "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review.",
+  "author": {
+    "name": "Imran Shahid"
+  },
+  "homepage": "https://github.com/ishahid/claude-plugins/tree/main/ai-sdlc",
+  "repository": "https://github.com/ishahid/claude-plugins",
+  "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
+  "keywords": ["sdlc", "specs", "design", "planning", "workflow", "review"],
+  "userConfig": {
+    "template_mode": {
+      "type": "string",
+      "title": "Template mode",
+      "description": "guide: use each stage's template as a starting point, keeping IDs, headers, and traceability. strict: follow each template's structure exactly.",
+      "options": ["guide", "strict"],
+      "default": "guide"
+    }
+  }
+}
