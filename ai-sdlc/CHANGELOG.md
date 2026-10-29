@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Set the plugin `displayName` to "ai-sdlc".
+
 ## 0.2.0
 
 - `review` no longer writes `05-review.md`. It presents findings in the conversation, applies approved fixes to the existing documents, and logs deferred or rejected findings in a dated `Review` entry in the plan's `Decisions` section.
