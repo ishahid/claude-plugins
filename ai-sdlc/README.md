@@ -51,7 +51,7 @@ The review presents its findings, asks you about anything it can't settle, and �
 | `/ai-sdlc:specs <slug>` | **What** must the system do, in testable terms? | intent, project docs, codebase | `02-specs.md` |
 | `/ai-sdlc:design <slug>` | **How** will we build it, and what trade-offs are we accepting? | intent, specs, project docs, codebase | `03-design.md` |
 | `/ai-sdlc:plan <slug>` | **In what steps** do we implement it, and how is each step verified? | intent, specs, design, project docs, codebase | `04-plan.md` |
-| `/ai-sdlc:review <slug>` | **Are we ready to build?** Do all documents hold together? | every document in the feature folder, project docs, codebase | `05-review.md` |
+| `/ai-sdlc:review <slug>` | **Are we ready to build?** Do all documents hold together? | every document in the feature folder, project docs, codebase | updates the existing documents; no new file |
 
 Stages 1–4 share the same rigour as the review:
 
@@ -83,8 +83,8 @@ The final gate before any code is written. It works in four phases:
 
 1. **Load context** — reads every document for the feature, your project's `CLAUDE.md` / `AGENTS.md` (and the docs they point to) as the source of truth for architecture and invariants, and spot-checks the real code wherever the documents describe it.
 2. **Review** — checks approvals; traceability in both directions (every goal covered, nothing untraced); contradictions between documents, with your project's invariants, or with the current code; completeness across data model, state machines, edge cases, permissions, interfaces, integrations, non-functional targets, and UX; plan quality (dependency order, test-first tasks, done-when checks, spikes, a smoke-test and docs-sync task); risks; and opportunities to simplify, reuse, or cut scope.
-3. **Present findings** — writes `05-review.md` and shows a verdict (**Ready** / **Ready with fixes** / **Not ready**), a findings table ranked `Blocker` / `Major` / `Minor` / `Suggestion` with a proposed fix for each, traceability gaps, and the assumptions it will apply unless you veto them. Questions it can't settle from the docs or code are asked as multiple choice, with a recommended option. Then it stops for your answers and approval.
-4. **Apply** — makes minimal edits to the affected documents, fixing the same fact everywhere it appears; records decisions in a dated `Decisions` section; adds plan tasks for any changes your source-of-truth docs need; marks each finding `Fixed` / `Deferred` / `Rejected` in `05-review.md`; and finishes with a `git diff --stat` and a short summary. It never commits.
+3. **Present findings** — shows, in the conversation, a verdict (**Ready** / **Ready with fixes** / **Not ready**), a findings table ranked `Blocker` / `Major` / `Minor` / `Suggestion` with a proposed fix for each, traceability gaps, and the assumptions it will apply unless you veto them. Questions it can't settle from the docs or code are asked as multiple choice, with a recommended option. Then it stops for your answers and approval.
+4. **Apply** — makes minimal edits to the affected documents, fixing the same fact everywhere it appears; records decisions in a dated `Decisions` section; adds plan tasks for any changes your source-of-truth docs need; logs the verdict and any `Deferred` / `Rejected` findings in a dated `Review` entry in the plan's `Decisions` section; and finishes with a `git diff --stat` and a short summary. It never commits.
 
 ---
 
@@ -98,11 +98,10 @@ docs/ai-sdlc/
     ├── 01-intent.md
     ├── 02-specs.md
     ├── 03-design.md
-    ├── 04-plan.md
-    └── 05-review.md
+    └── 04-plan.md
 ```
 
-Documents 01–04 have a `Status: Draft | Approved` header; the review has a `Verdict: Ready | Ready with fixes | Not ready` header. Stages 2–4 warn you if the previous document is not yet approved; the review treats any unapproved document as a Blocker. Re-running a stage revises its existing document rather than starting over.
+Documents 01–04 have a `Status: Draft | Approved` header; `review` writes no document of its own and edits these in place. Stages 2–4 warn you if the previous document is not yet approved; the review treats any unapproved document as a Blocker. Re-running a stage revises its existing document rather than starting over.
 
 ---
 
@@ -111,7 +110,7 @@ Documents 01–04 have a `Status: Draft | Approved` header; the review has a `Ve
 - **Skills, namespaced by plugin.** Each stage is a skill in `skills/<stage>/SKILL.md`. Claude Code prefixes plugin skills with the plugin name, which is what produces `/ai-sdlc:<stage>`.
 - **User-invoked only.** Every skill sets `disable-model-invocation: true`, so Claude never jumps into a stage on its own — you decide when to advance.
 - **Arguments.** Text after the command is passed to the skill as `$ARGUMENTS` (the idea for `intent`, the slug for the rest). If you omit the slug, the skill lists existing features and asks.
-- **Templates.** Each skill ships a Markdown template in its `templates/` folder that defines the document's shape. How closely it is followed depends on the [template mode](#configuration).
+- **Templates.** Each stage except `review` ships a Markdown template in its `templates/` folder that defines the document's shape. How closely it is followed depends on the [template mode](#configuration).
 - **Gates.** Each stage checks that the prior documents exist and are approved, traces its output back to them in both directions, and ends by asking for your sign-off.
 
 ---

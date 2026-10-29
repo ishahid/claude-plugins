@@ -1,7 +1,7 @@
 {
   "name": "ai-sdlc",
   "displayName": "AI SDLC",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review.",
   "author": {
     "name": "Imran Shahid"
