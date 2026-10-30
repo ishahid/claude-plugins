@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /ai-sdlc:plan — Implementation Plan
 
-You are running **stage 4 of 5** of the AI SDLC (`intent → specs → design → plan → review`).
+You are running **stage 4 of 7** of the AI SDLC (`intent → specs → design → plan → review → build → verify`).
 Your job is to turn the design into a task list that an engineer — or Claude — can execute one red/green cycle at a time, without making new design decisions.
 Be rigorous and specific. Don't praise, and don't pad. Do **not** start implementing.
 

@@ -10,8 +10,8 @@
     {
       "name": "ai-sdlc",
       "source": "./ai-sdlc",
-      "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review.",
-      "version": "0.2.1"
+      "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review → build → verify.",
+      "version": "0.3.0"
     }
   ]
 }

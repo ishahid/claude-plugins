@@ -6,7 +6,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) plugin marketplace.
 
 | Plugin | Commands | Description |
 |---|---|---|
-| [ai-sdlc](ai-sdlc/) | `/ai-sdlc:intent`, `/ai-sdlc:specs`, `/ai-sdlc:design`, `/ai-sdlc:plan`, `/ai-sdlc:review` | A staged, artifact-driven AI software development lifecycle. |
+| [ai-sdlc](ai-sdlc/) | `/ai-sdlc:intent`, `/ai-sdlc:specs`, `/ai-sdlc:design`, `/ai-sdlc:plan`, `/ai-sdlc:review`, `/ai-sdlc:build`, `/ai-sdlc:verify` | A staged, artifact-driven AI software development lifecycle. |
 
 ## Installation
 
@@ -57,6 +57,10 @@ claude-plugins/
 ├── ai-sdlc/                 # One folder per plugin
 │   ├── .claude-plugin/plugin.json
 │   ├── skills/
+│   ├── agents/
+│   ├── hooks/
+│   ├── scripts/
+│   ├── evals/
 │   ├── CHANGELOG.md
 │   └── README.md
 ├── LICENSE

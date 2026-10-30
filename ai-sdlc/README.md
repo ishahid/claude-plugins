@@ -3,11 +3,11 @@
 A Claude Code plugin that walks a feature through a staged, artifact-driven **AI software development lifecycle**:
 
 ```
-/ai-sdlc:intent  →  /ai-sdlc:specs  →  /ai-sdlc:design  →  /ai-sdlc:plan  →  /ai-sdlc:review
-     why               what               how               steps             ready to build?
+/ai-sdlc:intent → /ai-sdlc:specs → /ai-sdlc:design → /ai-sdlc:plan → /ai-sdlc:review → /ai-sdlc:build → /ai-sdlc:verify
+     why              what              how              steps         ready to build?     implement         does it work?
 ```
 
-Each stage reads the approved output of the previous one, interviews you to fill gaps, and writes a Markdown document into your repo. Nothing moves forward until you sign off, so code only gets written once intent, requirements, design, and tasks are all agreed, and the review has checked them all together as the final gate before implementation.
+Each of the first four stages reads the approved output of the previous one, interviews you to fill gaps, and writes a Markdown document into your repo. Nothing moves forward until you sign off. An independent **reviewer** agent then checks all the documents together before any code is written, `build` implements the plan task by task, and an independent **verifier** agent checks the result.
 
 To install, see the [marketplace README](../README.md#installation).
 
@@ -37,9 +37,11 @@ Answer the questions, approve the intent, then continue with the slug it gives y
 /ai-sdlc:design user-invitations
 /ai-sdlc:plan user-invitations
 /ai-sdlc:review user-invitations
+/ai-sdlc:build user-invitations
+/ai-sdlc:verify user-invitations
 ```
 
-The review presents its findings, asks you about anything it can't settle, and — once you approve — fixes the documents itself. When the verdict is **Ready**, Claude offers to start implementing the plan task by task.
+The review presents the reviewer agent's findings, asks you about anything it can't settle, and — once you approve — fixes the documents. When the verdict is **Ready**, `build` implements the plan task by task, and `verify` has a separate agent check the result.
 
 ---
 
@@ -52,6 +54,8 @@ The review presents its findings, asks you about anything it can't settle, and �
 | `/ai-sdlc:design <slug>` | **How** will we build it, and what trade-offs are we accepting? | intent, specs, project docs, codebase | `03-design.md` |
 | `/ai-sdlc:plan <slug>` | **In what steps** do we implement it, and how is each step verified? | intent, specs, design, project docs, codebase | `04-plan.md` |
 | `/ai-sdlc:review <slug>` | **Are we ready to build?** Do all documents hold together? | every document in the feature folder, project docs, codebase | updates the existing documents; no new file |
+| `/ai-sdlc:build <slug> [T-n]` | **Build it**, one task at a time. | the approved plan and documents, the code | code and tests; checks off tasks and keeps `04-plan.md` in sync |
+| `/ai-sdlc:verify <slug>` | **Does it work?** Do the results meet the goals and requirements? | every document, the code, the running app | a `Verification` entry in the plan's `Decisions` |
 
 Stages 1–4 share the same rigour as the review:
 
@@ -79,12 +83,22 @@ Milestones that each leave the system deployable, with spikes for unknowns first
 
 ### 5. Review
 
-The final gate before any code is written. It works in four phases:
+The final gate before any code is written. The review is done by the read-only `reviewer` agent in a fresh context, so the agent that wrote the documents never approves them. It works in four phases:
 
-1. **Load context** — reads every document for the feature, your project's `CLAUDE.md` / `AGENTS.md` (and the docs they point to) as the source of truth for architecture and invariants, and spot-checks the real code wherever the documents describe it.
-2. **Review** — checks approvals; traceability in both directions (every goal covered, nothing untraced); contradictions between documents, with your project's invariants, or with the current code; completeness across data model, state machines, edge cases, permissions, interfaces, integrations, non-functional targets, and UX; plan quality (dependency order, test-first tasks, done-when checks, spikes, a smoke-test and docs-sync task); risks; and opportunities to simplify, reuse, or cut scope.
-3. **Present findings** — shows, in the conversation, a verdict (**Ready** / **Ready with fixes** / **Not ready**), a findings table ranked `Blocker` / `Major` / `Minor` / `Suggestion` with a proposed fix for each, traceability gaps, and the assumptions it will apply unless you veto them. Questions it can't settle from the docs or code are asked as multiple choice, with a recommended option. Then it stops for your answers and approval.
+1. **Check the mechanics** — runs `scripts/trace.sh`, which flags unapproved documents and goals or requirements that are uncovered or orphaned.
+2. **Review** — the reviewer reads every document for the feature, your project's `CLAUDE.md` / `AGENTS.md` (and the docs they point to) as the source of truth for architecture and invariants, and spot-checks the real code wherever the documents describe it. It checks approvals; traceability in both directions (every goal covered, nothing untraced); contradictions between documents, with your project's invariants, or with the current code; completeness across data model, state machines, edge cases, permissions, interfaces, integrations, non-functional targets, and UX; plan quality (dependency order, test-first tasks, done-when checks, spikes, a smoke-test and docs-sync task); risks; and opportunities to simplify, reuse, or cut scope.
+3. **Present findings** — shows, in the conversation, the reviewer's verdict (**Ready** / **Ready with fixes** / **Not ready**), a findings table ranked `Blocker` / `Major` / `Minor` / `Suggestion` with a proposed fix for each, traceability gaps, and the assumptions it will apply unless you veto them. Questions it can't settle from the docs or code are asked as multiple choice, with a recommended option. Then it stops for your answers and approval.
 4. **Apply** — makes minimal edits to the affected documents, fixing the same fact everywhere it appears; records decisions in a dated `Decisions` section; adds plan tasks for any changes your source-of-truth docs need; logs the verdict and any `Deferred` / `Rejected` findings in a dated `Review` entry in the plan's `Decisions` section; and finishes with a `git diff --stat` and a short summary. It never commits.
+
+---
+
+### 6. Build
+
+Implements `04-plan.md` one task at a time. It refuses to start unless the documents are approved and the plan's latest `Review` entry is `Ready`. For each task it writes the failing test first, confirms it fails for the right reason, implements the change, and runs the task's `Done when` command. Bug fixes lock the test once it is written and fix the code without editing it. When what was built differs from the plan, it updates the plan in the same step and records why. It never pushes, and commits only if you ask at the start.
+
+### 7. Verify
+
+The read-only `verifier` agent, in a fresh context, runs the full suite, linters, every task's `Done when` check, and the end-to-end task, then exercises the running feature against the requirements and intent goals. It reports `Verified` / `Verified with gaps` / `Failed` with evidence and fixes nothing. The verdict is recorded in the plan's `Decisions`; failures go back through `build` in bug-fix mode.
 
 ---
 
@@ -111,13 +125,14 @@ Documents 01–04 have a `Status: Draft | Approved` header; `review` writes no d
 - **User-invoked only.** Every skill sets `disable-model-invocation: true`, so Claude never jumps into a stage on its own — you decide when to advance.
 - **Arguments.** Text after the command is passed to the skill as `$ARGUMENTS` (the idea for `intent`, the slug for the rest). If you omit the slug, the skill lists existing features and asks.
 - **Templates.** Each stage except `review` ships a Markdown template in its `templates/` folder that defines the document's shape. How closely it is followed depends on the [template mode](#configuration).
+- **Agents.** `agents/reviewer.md` and `agents/verifier.md` are read-only subagents, so the review and the verification come from an agent that did not write the documents or the code.
 - **Gates.** Each stage checks that the prior documents exist and are approved, traces its output back to them in both directions, and ends by asking for your sign-off.
 
 ---
 
 ## Configuration
 
-The plugin has one option, **Template mode**, which controls how closely each stage follows its template:
+The plugin has two options. **Template mode** controls how closely each stage follows its template:
 
 | Mode | Behaviour |
 |---|---|
@@ -132,15 +147,28 @@ echo '{"template_mode": "strict"}' | claude plugin configure ai-sdlc@ishahid --v
 
 The value is saved per user, and takes effect the next time you run a stage.
 
+**Guardrail hooks** (`guardrails`, default `false`) turn on `hooks/guard.sh`, which runs before every file edit and:
+
+- asks before a stage document is set to `Status: Approved`;
+- while `build` has a task active, asks before editing a file that task doesn't list in the plan;
+- while a bug fix has its tests locked, denies edits to test files.
+
+```bash
+echo '{"guardrails": true}' | claude plugin configure ai-sdlc@ishahid --values-stdin
+```
+
+Hooks need `jq` and run only while a feature's `.current-task` file exists, except for the Approved check.
+
 ---
 
 ## Customizing
 
 - **Change a document's shape:** edit the template in `skills/<stage>/templates/`.
 - **Change a stage's behavior:** edit the steps and exit criteria in `skills/<stage>/SKILL.md`.
-- **Change where documents go:** replace `docs/ai-sdlc/` in the five `SKILL.md` files.
+- **Change where documents go:** replace `docs/ai-sdlc/` in the seven `SKILL.md` files, `agents/`, `hooks/guard.sh`, and `scripts/trace.sh`.
 - **Let Claude invoke stages automatically:** remove `disable-model-invocation: true` from a skill's frontmatter.
-- **Add a stage** (e.g. `/ai-sdlc:build` or `/ai-sdlc:release`): create `skills/<name>/SKILL.md` with `name`, `description`, and `argument-hint` frontmatter, and have it read the previous stage's document.
+- **Check your changes:** run `evals/run.sh`. It verifies the manifests, skill and agent frontmatter, `scripts/trace.sh` against the fixture features in `evals/fixtures/`, and the hooks. Add a fixture folder (with an `expect.txt` for a broken one) when you add a check.
+- **Add a stage** (e.g. `/ai-sdlc:release`): create `skills/<name>/SKILL.md` with `name`, `description`, and `argument-hint` frontmatter, and have it read the previous stage's document.
 
 ---
 

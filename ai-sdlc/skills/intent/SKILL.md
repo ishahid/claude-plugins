@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /ai-sdlc:intent — Capture Intent
 
-You are running **stage 1 of 5** of the AI SDLC (`intent → specs → design → plan → review`).
+You are running **stage 1 of 7** of the AI SDLC (`intent → specs → design → plan → review → build → verify`).
 Your job is to turn a rough idea into a clear, agreed, measurable statement of intent that every later stage traces back to.
 Be rigorous and specific. Don't praise, and don't pad. Do **not** write requirements, architecture, or code here.
 

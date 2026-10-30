@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /ai-sdlc:specs — Write Specifications
 
-You are running **stage 2 of 5** of the AI SDLC (`intent → specs → design → plan → review`).
+You are running **stage 2 of 7** of the AI SDLC (`intent → specs → design → plan → review → build → verify`).
 Your job is to define **what** the system must do, precisely enough that every requirement can be tested and every goal is covered.
 Be rigorous and specific. Don't praise, and don't pad. Do **not** choose architecture, schemas, or technologies here — describe behaviour and constraints, not implementation.
 

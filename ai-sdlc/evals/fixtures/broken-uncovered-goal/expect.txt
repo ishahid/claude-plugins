@@ -1,0 +1,1 @@
+goal G-2 is not referenced in 02-specs.md
