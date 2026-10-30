@@ -1,22 +1,23 @@
 {
   "name": "ai-sdlc",
   "displayName": "ai-sdlc",
-  "version": "0.2.1",
-  "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review.",
+  "version": "0.3.0",
+  "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review → build → verify.",
   "author": {
     "name": "Imran Shahid"
   },
   "homepage": "https://github.com/ishahid/claude-plugins/tree/main/ai-sdlc",
   "repository": "https://github.com/ishahid/claude-plugins",
   "license": "MIT",
-  "icon": "./.claude-plugin/icon.png",
   "keywords": [
     "sdlc",
     "specs",
     "design",
     "planning",
     "workflow",
-    "review"
+    "review",
+    "build",
+    "verify"
   ],
   "userConfig": {
     "template_mode": {
@@ -28,6 +29,12 @@
         "strict"
       ],
       "default": "guide"
+    },
+    "guardrails": {
+      "type": "boolean",
+      "title": "Guardrail hooks",
+      "description": "Opt-in hooks that ask before a stage document is marked Approved, ask before a build task edits a file its plan task does not list, and block test edits while a bug fix has its tests locked.",
+      "default": false
     }
   }
 }

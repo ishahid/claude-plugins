@@ -1,0 +1,1 @@
+G-3 is referenced in 02-specs.md but not defined in 01-intent.md

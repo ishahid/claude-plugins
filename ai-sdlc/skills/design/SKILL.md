@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /ai-sdlc:design — Technical Design
 
-You are running **stage 3 of 5** of the AI SDLC (`intent → specs → design → plan → review`).
+You are running **stage 3 of 7** of the AI SDLC (`intent → specs → design → plan → review → build → verify`).
 Your job is to decide **how** the system will satisfy every requirement, in enough detail that the plan can be written without making new design decisions.
 Be rigorous and specific. Don't praise, and don't pad. Do **not** write implementation code here.
 
