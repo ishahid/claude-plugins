@@ -12,6 +12,12 @@
       "source": "./ai-sdlc",
       "description": "A staged, artifact-driven AI software development lifecycle: intent → specs → design → plan → review → build → verify.",
       "version": "0.3.0"
+    },
+    {
+      "name": "audit",
+      "source": "./audit",
+      "description": "Read-only, evidence-based codebase audits that discover the stack, check it against current best practice, and report severity-ranked findings: frontend, with more domains to come, and all.",
+      "version": "0.1.0"
     }
   ]
 }
