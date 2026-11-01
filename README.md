@@ -16,6 +16,7 @@ Add the marketplace once, then install any plugin from it as `<plugin>@ishahid`.
 ```
 /plugin marketplace add ishahid/claude-plugins
 /plugin install ai-sdlc@ishahid
+/plugin install audit@ishahid
 ```
 
 Or from your shell:
@@ -23,6 +24,7 @@ Or from your shell:
 ```bash
 claude plugin marketplace add ishahid/claude-plugins
 claude plugin install ai-sdlc@ishahid
+claude plugin install audit@ishahid
 ```
 
 ### For a whole team
@@ -37,16 +39,20 @@ Add this to a project's `.claude/settings.json` so everyone who opens it is offe
     }
   },
   "enabledPlugins": {
-    "ai-sdlc@ishahid": true
+    "ai-sdlc@ishahid": true,
+    "audit@ishahid": true
   }
 }
 ```
 
 ### Updating and uninstalling
 
+Refresh the marketplace to pick up new plugin versions, then uninstall any plugin you no longer want:
+
 ```
 /plugin marketplace update ishahid
 /plugin uninstall ai-sdlc@ishahid
+/plugin uninstall audit@ishahid
 ```
 
 ## Repository layout
