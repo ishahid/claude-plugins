@@ -1,6 +1,6 @@
 ---
 name: all
-description: Run every available audit domain (frontend, and backend, infra, tests, e2e, assets as they are added) as one read-only audit. Gates are asked once for all domains, each domain is audited in parallel by an independent agent, and the results are merged into one severity-ranked report.
+description: Run every available audit domain (frontend, backend, infra, tests, e2e, assets, and any added later) as one read-only audit. Gates are asked once for all domains, each domain is audited in parallel by an independent agent, and the results are merged into one severity-ranked report.
 argument-hint: "[domain ...] [--skip domain ...] [path ...]"
 disable-model-invocation: true
 ---
@@ -49,18 +49,21 @@ Read each selected domain's `SKILL.md` and run its **Phase 1 (Discover)** yourse
 
 A unit can belong to several domains (e.g. a Next.js app is both `frontend` and `backend`). List it under each domain, and note it in the overlap column.
 
-**Gate 1.** Show one inventory with a section per domain, plus the combined excluded list, and a line per unavailable domain ("`infra`: not yet available"). Ask with one AskUserQuestion call:
+Some domains build a map as part of discovery (the `backend` service map, the `infra` delivery paths, the `tests` risk map, the `e2e` journey map). Include each one.
+
+**Gate 1.** Show one inventory with a section per domain, plus the combined excluded list, the maps, and a line per unavailable domain ("`infra`: not yet available"). Ask with AskUserQuestion:
 
 - Is this inventory complete and correct?
 - Which domains or units have priority?
 - Which branch or environment is production?
+- Then the domain-specific Gate 1 questions (e.g. infra managed outside the repo, the critical areas or journeys, where assets come from), merged where they overlap. Use a second call if there are more than 4.
 
 ## 2. Ask once
 
 Build **one** Gate 2 from the domains' Gate 2 sections. Merge questions that ask the same thing (priority, commands, depth, steering) into one question that applies to every domain. A domain-specific question goes in only if its answer changes what that domain does. Respect the contract's limit of 4 questions per AskUserQuestion call. If more are left after merging, use a second call.
 
 - **Priority:** offer the dimensions that the selected domains share (security, dependencies, tests, performance, tooling …).
-- **Commands:** the same three levels as the domains (static only (Recommended) / install + lint + unit tests / full including builds), applied to every domain unless the user names exceptions.
+- **Commands:** three levels mapped onto each domain's own options: static only (Recommended) / local checks (each domain's middle option: installs with scripts off, lint, unit tests, offline validation) / full (each domain's highest option). Apply the level to every domain unless the user names exceptions, and tell each auditor which of its own options that level means.
 
 Defaults if skipped: each domain's own defaults. List them.
 
@@ -72,7 +75,7 @@ Launch one `audit:auditor` agent per selected domain, **all in a single message*
 
 - the domain name and the absolute path of its `SKILL.md` (resolve `${CLAUDE_PLUGIN_ROOT}` with Bash first)
 - the absolute path of the contract
-- that domain's confirmed inventory
+- that domain's confirmed inventory, and every map it built in Phase 1, as corrected at Gate 1
 - the Gate 2 answers, including any per-domain exceptions
 - the list of the other domains running, for the overlap rule
 

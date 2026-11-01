@@ -9,11 +9,11 @@ To install, see the [marketplace README](../README.md#installation).
 | Command | Audits | Status |
 |---|---|---|
 | `/audit:frontend [path …] [focus]` | Browser code: SPAs, SSR and meta-frameworks, server-rendered templates with bundles, web components, design systems, extensions | Available |
-| `/audit:backend` | Services, APIs, data access | Planned |
-| `/audit:infra` | IaC, containers, CI/CD, cloud config | Planned |
-| `/audit:tests` | Test strategy and quality | Planned |
-| `/audit:e2e` | End-to-end and integration suites | Planned |
-| `/audit:assets` | Images, fonts, media, static files | Planned |
+| `/audit:backend [path …] [focus]` | Services, APIs, workers, data access, migrations, the server side of full-stack apps | Available |
+| `/audit:infra [path …] [focus]` | IaC, containers, Kubernetes/Helm, CI/CD pipelines, hosting and secrets config (code only, never live accounts) | Available |
+| `/audit:tests [path …] [focus]` | Unit, integration, and component suites in any language, measured against a risk and churn map | Available |
+| `/audit:e2e [path …] [focus]` | Browser, API, mobile, and system suites, measured against the critical user journeys | Available |
+| `/audit:assets [path …] [focus]` | Images, SVGs, fonts, media, documents, and committed binaries, including git history bloat | Available |
 | `/audit:all [domain …] [--skip domain …]` | Every available domain, merged into one report | Available |
 
 ## How an audit runs
@@ -27,9 +27,18 @@ To install, see the [marketplace README](../README.md#installation).
 
 `/audit:all` runs discovery and both gates **once** for every domain, has an independent `auditor` agent audit each domain in parallel, then deduplicates, re-ranks, and adds cross-domain findings, such as a front end and back end that disagree on the auth model.
 
-### Front-end dimensions
+### Dimensions by domain
 
-Security (including privacy), dependencies and supply chain, accessibility, test quality, performance, architecture and maintainability, and tooling and developer experience.
+| Domain | Dimensions |
+|---|---|
+| frontend | security and privacy, dependencies and supply chain, accessibility, test quality, performance, architecture, tooling |
+| backend | security, data integrity, reliability, dependencies, API contracts, performance, observability, architecture, tooling |
+| infra | security posture, pipeline supply chain, secrets, reliability and recovery, drift, cost, operability, tooling |
+| tests | risk gaps, effectiveness, determinism, coverage gating, speed, maintainability, CI integration |
+| e2e | journey coverage, reliability, CI gating, test data and environments, speed, maintainability, tooling |
+| assets | delivery performance, licensing, security and privacy, accessibility, caching, repo hygiene, tooling |
+
+When several domains run under `/audit:all`, each concern has one owner (for example, `tests` owns test quality and `assets` owns images and fonts), so findings aren't reported twice.
 
 ## Safety
 
@@ -51,5 +60,4 @@ Every claim is tagged `[Certain]` (seen), `[Likely]` (strong inference), or `[Gu
 1. Create `skills/<domain>/SKILL.md` with `disable-model-invocation: true`.
 2. Have it read `references/contract.md` and follow its ground rules, finding format, gates, and delegated mode.
 3. Give it `Phase 1: Discover` (ending in Gate 1), `Phase 2` (ending in Gate 2), its checks, and a report section that returns the delegated report in delegated mode.
-4. Pick an ID prefix and add the domain to the table in `skills/all/SKILL.md`. `/audit:all` picks up any new `skills/` directory automatically. The table only fixes report order and prefixes.
-5. Add an `Overlap` note if your checks overlap an existing domain.
+4. Pick an ID prefix and add the domain to the table in `skills/all/SKILL.md`, and add any concern it owns to the overlap table in `references/contract.md`. `/audit:all` picks up any new `skills/` directory automatically. The table only fixes report order and prefixes.

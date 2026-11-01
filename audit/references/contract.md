@@ -1,6 +1,6 @@
 # Audit contract
 
-Every audit domain (`frontend`, and later `backend`, `infra`, `tests`, `e2e`, `assets`) follows this contract, and `/audit:all` relies on it to run several domains together and merge their results. A domain skill adds its own discovery, questions, and checks. It does not redefine anything here.
+Every audit domain (`frontend`, `backend`, `infra`, `tests`, `e2e`, `assets`) follows this contract, and `/audit:all` relies on it to run several domains together and merge their results. A domain skill adds its own discovery, questions, and checks. It does not redefine anything here.
 
 ## Ground rules
 
@@ -12,9 +12,10 @@ Every audit domain (`frontend`, and later `backend`, `infra`, `tests`, `e2e`, `a
 - **Audit the production ref.** If it isn't the checked-out `HEAD`, read files with `git show <ref>:<path>` and search with `git grep <pattern> <ref>`. Both are read-only and need no checkout. If the working tree has uncommitted changes or sits on a different ref, say so under `Could not verify`.
   - Use the lockfile (`ci`, `--frozen-lockfile`, `--immutable`). Never re-resolve dependencies.
   - Allow about 5 minutes per command. Stop anything longer and record it under "Could not verify".
-- **Allowed without asking:** reading files, `git log`/`show`/`blame`, `grep`/`rg`/`find`, lockfile-only audits (`npm audit --package-lock-only`, `pnpm audit`, `osv-scanner` if already installed), and web search.
+- **Allowed without asking:** reading files, `git log`/`show`/`blame`/`rev-list`, `grep`/`rg`/`find`, lockfile-only audits (`npm audit --package-lock-only`, `pnpm audit`), static scanners and metadata tools **already installed** on the machine that only read files (`osv-scanner`, `gitleaks`, `hadolint`, `exiftool`, …), and web search. Never install a tool to run it. Treat scanner output as leads to confirm, not findings.
 - **Never:** install anything globally, use credentials the user did not provide, contact production systems, or send repository content to any service other than the package registry and web search.
-- **Secrets.** When you find a committed secret, cite its `path:line` and the kind of secret. Never print the value. Show at most the first 4 characters.
+- **Secrets and personal data.** When you find a committed secret, cite its `path:line` and the kind of secret. Never print the value. Show at most the first 4 characters. Run any tool that can surface secrets or personal data in redacting or summary mode (`gitleaks --redact`; for `exiftool`, report only which sensitive fields are present, never their values), and describe sensitive images or documents without reproducing their contents.
+- **Cleanup.** Before you finish, delete the scratch directory and remove everything the audit started or built outside it: containers, volumes, networks, and images (`docker compose -p <project> down -v`, `docker image rm <tag>`). Use a project name or tag unique to the audit so you remove only what you created. List anything you couldn't remove.
 
 ## Evidence and confidence
 
@@ -67,7 +68,8 @@ Ask with the AskUserQuestion tool: at most 4 questions per call, each with 2–4
 
 `/audit:all` runs the gates once for every domain and then hands each domain to an `audit:auditor` agent. When a domain skill runs in delegated mode:
 
-- The calling prompt gives you the confirmed inventory and the Gate 2 answers. Ask nothing and skip both gates.
+- The calling prompt gives you the confirmed inventory, every map your domain builds in Phase 1 (service map, delivery paths, risk map, journey map) as corrected at Gate 1, and the Gate 2 answers. Ask nothing and skip both gates.
+- If a map your domain builds in Phase 1 is missing, rebuild it before continuing, and note under `Could not verify` that the user didn't confirm it. Defaults are no substitute for the map.
 - Run every phase after Gate 2.
 - Return only the delegated report below, not the chat report.
 
@@ -83,4 +85,14 @@ Ask with the AskUserQuestion tool: at most 4 questions per call, each with 2–4
 
 ## Overlap between domains
 
-When `/audit:all` tells you another domain is also running and one of your checks belongs to it (e.g. test quality when `tests` is running, or images and fonts when `assets` is running), do only a light pass on that check and record a one-line pointer: `See <domain> audit.` Keep anything specific to your domain.
+Each concern has one owner domain:
+
+| Concern | Owner | Others |
+|---|---|---|
+| Unit, integration, and component test quality | `tests` | `frontend` and `backend` keep only checks specific to their framework |
+| End-to-end and system suites | `e2e` | `tests` and `frontend` note presence only |
+| Images, fonts, media, and other static files | `assets` | `frontend` keeps JS/CSS bundles and rendering |
+| CI/CD pipelines, containers, IaC, cloud config | `infra` | `frontend` and `backend` check only that lint, typecheck, and tests gate merges |
+| Server side of full-stack apps | `backend` | `frontend` checks only what leaks to the client |
+
+When `/audit:all` tells you the owner of one of your checks is also running, do only a light pass on that check and record a one-line pointer: `See <domain> audit.` When the owner is not running, do the check in full.

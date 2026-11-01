@@ -16,8 +16,8 @@
     {
       "name": "audit",
       "source": "./audit",
-      "description": "Read-only, evidence-based codebase audits that discover the stack, check it against current best practice, and report severity-ranked findings: frontend, with more domains to come, and all.",
-      "version": "0.1.0"
+      "description": "Read-only, evidence-based codebase audits that discover the stack, check it against current best practice, and report severity-ranked findings: frontend, backend, infra, tests, e2e, assets, and all.",
+      "version": "0.2.0"
     }
   ]
 }

@@ -7,7 +7,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) plugin marketplace.
 | Plugin | Commands | Description |
 |---|---|---|
 | [ai-sdlc](ai-sdlc/) | `/ai-sdlc:intent`, `/ai-sdlc:specs`, `/ai-sdlc:design`, `/ai-sdlc:plan`, `/ai-sdlc:review`, `/ai-sdlc:build`, `/ai-sdlc:verify` | A staged, artifact-driven AI software development lifecycle. |
-| [audit](audit/) | `/audit:frontend`, `/audit:all` | Read-only, evidence-based codebase audits with severity-ranked findings. |
+| [audit](audit/) | `/audit:frontend`, `/audit:backend`, `/audit:infra`, `/audit:tests`, `/audit:e2e`, `/audit:assets`, `/audit:all` | Read-only, evidence-based codebase audits with severity-ranked findings. |
 
 ## Installation
 
@@ -72,7 +72,7 @@ claude-plugins/
 │   └── README.md
 ├── audit/
 │   ├── .claude-plugin/plugin.json
-│   ├── skills/              # frontend, all
+│   ├── skills/              # frontend, backend, infra, tests, e2e, assets, all
 │   ├── agents/              # auditor
 │   ├── references/          # contract.md shared by every audit domain
 │   ├── CHANGELOG.md

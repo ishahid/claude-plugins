@@ -33,7 +33,7 @@ Finding IDs use the prefix `FE-`.
 
 **In scope:** anything that ships code to a browser. That includes SPAs, SSR and meta-framework apps (Next, Nuxt, SvelteKit, Remix/React Router, Astro, Angular SSR, …), server-rendered templates with their own JS/CSS bundles, web components, micro-frontends, browser extensions, the web layer of hybrid apps (Capacitor, Ionic, Electron renderer), and UI component libraries or design systems consumed by those apps, including Storybook.
 
-**Out of scope:** backend services, infrastructure, Node CLIs, lambdas, and pure static-site docs. Record each one you excluded with a one-line reason. When the same package holds server and browser code (e.g. Next.js route handlers), audit the browser side and the boundary (what leaks to the client), not the server logic.
+**Out of scope:** backend services, infrastructure, Node CLIs, lambdas, and pure static-site docs. Test quality, E2E suites, static assets, and CI pipeline security belong to `tests`, `e2e`, `assets`, and `infra`; follow the contract's overlap rule when those run alongside you. Record each one you excluded with a one-line reason. When the same package holds server and browser code (e.g. Next.js route handlers), audit the browser side and the boundary (what leaks to the client), not the server logic.
 
 ## Phase 1: Discover
 
@@ -159,4 +159,4 @@ Otherwise report **in chat only**. Write no files in the repo. Keep it under abo
 8. **Could not verify:** skipped checks, why, and what it would take.
 9. **Open questions for the team.**
 
-Finish by deleting your scratch directory. Then offer to save the full report, including all findings beyond the top 10, to a file outside the repo, or to turn the top findings into tickets. Do neither unless the user asks.
+Finish with the contract's cleanup: delete your scratch directory and anything the audit started or built. Then offer to save the full report, including all findings beyond the top 10, to a file outside the repo, or to turn the top findings into tickets. Do neither unless the user asks.

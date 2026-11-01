@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0
+
+- New `backend` domain: security (injection, IDOR, tenancy, SSRF), data integrity (migrations, transactions, idempotency), reliability (timeouts, retries, queues), dependencies, API contracts, performance, observability, architecture, and tooling, with a service map.
+- New `infra` domain: security posture, CI/CD supply chain (pinned actions, token permissions, dangerous triggers, OIDC), secrets, reliability and recovery, environment drift, cost, and operability. Audits code only and never touches cloud accounts or clusters.
+- New `tests` domain: test suites in any language measured against a risk map built from critical areas, churn, and fix commits, plus effectiveness, determinism, coverage gating, speed, and CI integration.
+- New `e2e` domain: browser, API, mobile, and system suites measured against a map of critical user journeys, plus reliability, CI gating, test data and environments, speed, and maintainability. Never runs against shared environments.
+- New `assets` domain: delivery performance, licensing and provenance, SVG and metadata leaks, accessibility of media, caching, and repo hygiene including large blobs in git history.
+- The contract now assigns each overlapping concern to one owner domain, and allows already-installed read-only scanners.
+- `all` merges domain-specific Gate 1 questions and maps the command levels onto each domain's own options.
+
 ## 0.1.0
 
 - Initial release.
