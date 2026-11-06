@@ -1,7 +1,7 @@
 ---
 name: verify
 description: Stage 7 of the AI SDLC. Have an independent verifier agent check the built feature against the plan, requirements, and intent goals — running the real tests, checks, and app — then record the result in the plan. Fixes nothing itself.
-argument-hint: "<feature slug>"
+argument-hint: "feature-slug"
 disable-model-invocation: true
 ---
 

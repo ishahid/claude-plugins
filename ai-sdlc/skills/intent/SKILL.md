@@ -1,7 +1,7 @@
 ---
 name: intent
-description: Stage 1 of the AI SDLC. Rigorously capture why a feature should exist, for whom, and how success will be measured — grounded in the real codebase and the project's invariants — before any requirements are written. Produces docs/ai-sdlc/<feature>/01-intent.md.
-argument-hint: "<feature name or one-line idea>"
+description: Stage 1 of the AI SDLC. Rigorously capture why a feature should exist, for whom, and how success will be measured — grounded in the real codebase and the project's invariants — before any requirements are written. Produces docs/ai-sdlc/FEATURE/01-intent.md.
+argument-hint: "feature name or one-line idea"
 disable-model-invocation: true
 ---
 

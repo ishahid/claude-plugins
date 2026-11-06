@@ -1,7 +1,7 @@
 ---
 name: review
 description: Stage 5 of the AI SDLC. Final gate before implementation — have an independent reviewer agent review the intent, specs, design, and plan against each other and the codebase, resolve open questions with the user, and apply the approved fixes directly to those documents. Produces no new file.
-argument-hint: "<feature slug>"
+argument-hint: "feature-slug"
 disable-model-invocation: true
 ---
 

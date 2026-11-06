@@ -1,7 +1,7 @@
 ---
 name: specs
-description: Stage 2 of the AI SDLC. Turn an approved intent into complete, testable functional and non-functional requirements — behaviour, data, states, permissions, interfaces, edge cases, and UX — each traced to a goal. Produces docs/ai-sdlc/<feature>/02-specs.md.
-argument-hint: "<feature slug>"
+description: Stage 2 of the AI SDLC. Turn an approved intent into complete, testable functional and non-functional requirements — behaviour, data, states, permissions, interfaces, edge cases, and UX — each traced to a goal. Produces docs/ai-sdlc/FEATURE/02-specs.md.
+argument-hint: "feature-slug"
 disable-model-invocation: true
 ---
 

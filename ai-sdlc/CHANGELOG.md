@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Skill descriptions and argument hints no longer contain literal angle brackets (`<feature>`), which some loaders read as XML tags and rejected, so the skill never registered.
+
 ## 0.3.0
 
 - New `build` stage: implements `04-plan.md` one task at a time (failing test first, then code, then the task's done-when check) and keeps the plan in sync with what was built.

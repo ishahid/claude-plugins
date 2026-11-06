@@ -1,7 +1,7 @@
 ---
 name: design
-description: Stage 3 of the AI SDLC. Produce a rigorous technical design that satisfies every approved requirement — grounded in the real codebase and the project's invariants — covering architecture, data model, state machines, interfaces, integrations, permissions, non-functional concerns, rollout, and testing, with decisions recorded. Produces docs/ai-sdlc/<feature>/03-design.md.
-argument-hint: "<feature slug>"
+description: Stage 3 of the AI SDLC. Produce a rigorous technical design that satisfies every approved requirement — grounded in the real codebase and the project's invariants — covering architecture, data model, state machines, interfaces, integrations, permissions, non-functional concerns, rollout, and testing, with decisions recorded. Produces docs/ai-sdlc/FEATURE/03-design.md.
+argument-hint: "feature-slug"
 disable-model-invocation: true
 ---
 

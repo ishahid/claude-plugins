@@ -1,7 +1,7 @@
 ---
 name: plan
-description: Stage 4 of the AI SDLC. Break an approved design into small, dependency-ordered, test-first tasks — each naming its files, its failing test, and a concrete done check — with spikes, rollout, verification, and docs-sync covered. Produces docs/ai-sdlc/<feature>/04-plan.md.
-argument-hint: "<feature slug>"
+description: Stage 4 of the AI SDLC. Break an approved design into small, dependency-ordered, test-first tasks — each naming its files, its failing test, and a concrete done check — with spikes, rollout, verification, and docs-sync covered. Produces docs/ai-sdlc/FEATURE/04-plan.md.
+argument-hint: "feature-slug"
 disable-model-invocation: true
 ---
 

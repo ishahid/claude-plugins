@@ -1,7 +1,7 @@
 ---
 name: build
-description: Stage 6 of the AI SDLC. Implement an approved, reviewed plan one task at a time — failing test first, then the code, then the task's done-when check — keeping the plan in sync with what actually gets built. Updates docs/ai-sdlc/<feature>/04-plan.md as tasks complete.
-argument-hint: "<feature slug> [T-n]"
+description: Stage 6 of the AI SDLC. Implement an approved, reviewed plan one task at a time — failing test first, then the code, then the task's done-when check — keeping the plan in sync with what actually gets built. Updates docs/ai-sdlc/FEATURE/04-plan.md as tasks complete.
+argument-hint: "feature-slug [T-n]"
 disable-model-invocation: true
 ---
 
