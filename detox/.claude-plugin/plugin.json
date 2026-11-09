@@ -1,0 +1,24 @@
+{
+  "name": "detox",
+  "displayName": "detox",
+  "version": "0.1.0",
+  "description": "Audit and declutter a Claude setup in five parts (interface, memory and context, skills, connectors, scheduled tasks), review the findings on one checklist page, and apply only what you tick.",
+  "author": {
+    "name": "Imran Shahid"
+  },
+  "homepage": "https://github.com/ishahid/claude-plugins/tree/main/detox",
+  "repository": "https://github.com/ishahid/claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "detox",
+    "cleanup",
+    "declutter",
+    "skills",
+    "connectors",
+    "mcp",
+    "memory",
+    "claude-md",
+    "scheduled-tasks",
+    "context"
+  ]
+}
