@@ -8,6 +8,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) plugin marketplace.
 |---|---|---|
 | [ai-sdlc](ai-sdlc/) | `/ai-sdlc:intent`, `/ai-sdlc:specs`, `/ai-sdlc:design`, `/ai-sdlc:plan`, `/ai-sdlc:review`, `/ai-sdlc:build`, `/ai-sdlc:verify` | A staged, artifact-driven AI software development lifecycle. |
 | [audit](audit/) | `/audit:frontend`, `/audit:backend`, `/audit:infra`, `/audit:tests`, `/audit:e2e`, `/audit:assets`, `/audit:all` | Read-only, evidence-based codebase audits with severity-ranked findings. |
+| [detox](detox/) | `/detox:run` | Audit and declutter a Claude setup (interface, memory, skills, connectors, scheduled tasks) from one checklist page. Applies only what you tick. |
 
 ## Installation
 
@@ -17,6 +18,7 @@ Add the marketplace once, then install any plugin from it as `<plugin>@ishahid`.
 /plugin marketplace add ishahid/claude-plugins
 /plugin install ai-sdlc@ishahid
 /plugin install audit@ishahid
+/plugin install detox@ishahid
 ```
 
 Or from your shell:
@@ -25,6 +27,7 @@ Or from your shell:
 claude plugin marketplace add ishahid/claude-plugins
 claude plugin install ai-sdlc@ishahid
 claude plugin install audit@ishahid
+claude plugin install detox@ishahid
 ```
 
 ### For a whole team
@@ -40,7 +43,8 @@ Add this to a project's `.claude/settings.json` so everyone who opens it is offe
   },
   "enabledPlugins": {
     "ai-sdlc@ishahid": true,
-    "audit@ishahid": true
+    "audit@ishahid": true,
+    "detox@ishahid": true
   }
 }
 ```
@@ -53,6 +57,7 @@ Refresh the marketplace to pick up new plugin versions, then uninstall any plugi
 /plugin marketplace update ishahid
 /plugin uninstall ai-sdlc@ishahid
 /plugin uninstall audit@ishahid
+/plugin uninstall detox@ishahid
 ```
 
 ## Repository layout
@@ -75,6 +80,14 @@ claude-plugins/
 │   ├── skills/              # frontend, backend, infra, tests, e2e, assets, all
 │   ├── agents/              # auditor
 │   ├── references/          # contract.md shared by every audit domain
+│   ├── CHANGELOG.md
+│   └── README.md
+├── detox/
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/run/          # the /detox:run workflow
+│   ├── scripts/             # gather_local.py, build_page.py
+│   ├── references/          # checks.md, findings-schema.md
+│   ├── assets/              # page.html checklist template
 │   ├── CHANGELOG.md
 │   └── README.md
 ├── LICENSE

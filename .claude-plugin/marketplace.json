@@ -18,6 +18,12 @@
       "source": "./audit",
       "description": "Read-only, evidence-based codebase audits that discover the stack, check it against current best practice, and report severity-ranked findings: frontend, backend, infra, tests, e2e, assets, and all.",
       "version": "0.2.0"
+    },
+    {
+      "name": "detox",
+      "source": "./detox",
+      "description": "Audit and declutter a Claude setup in five parts (interface, memory and context, skills, connectors, scheduled tasks), review the findings on one checklist page, and apply only what you tick.",
+      "version": "0.1.0"
     }
   ]
 }
