@@ -9,6 +9,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) plugin marketplace.
 | [ai-sdlc](ai-sdlc/) | `/ai-sdlc:intent`, `/ai-sdlc:specs`, `/ai-sdlc:design`, `/ai-sdlc:plan`, `/ai-sdlc:review`, `/ai-sdlc:build`, `/ai-sdlc:verify` | A staged, artifact-driven AI software development lifecycle. |
 | [audit](audit/) | `/audit:frontend`, `/audit:backend`, `/audit:infra`, `/audit:tests`, `/audit:e2e`, `/audit:assets`, `/audit:all` | Read-only, evidence-based codebase audits with severity-ranked findings. |
 | [detox](detox/) | `/detox:run` | Audit and declutter a Claude setup (interface, memory, skills, connectors, scheduled tasks) from one checklist page. Applies only what you tick. |
+| [sast](sast/) | `/sast:run` | Read-only, multi-agent static application security testing with evidence-backed, CVSS 4.0-scored findings. |
 
 ## Installation
 
@@ -19,6 +20,7 @@ Add the marketplace once, then install any plugin from it as `<plugin>@ishahid`.
 /plugin install ai-sdlc@ishahid
 /plugin install audit@ishahid
 /plugin install detox@ishahid
+/plugin install sast@ishahid
 ```
 
 Or from your shell:
@@ -28,6 +30,7 @@ claude plugin marketplace add ishahid/claude-plugins
 claude plugin install ai-sdlc@ishahid
 claude plugin install audit@ishahid
 claude plugin install detox@ishahid
+claude plugin install sast@ishahid
 ```
 
 ### For a whole team
@@ -44,7 +47,8 @@ Add this to a project's `.claude/settings.json` so everyone who opens it is offe
   "enabledPlugins": {
     "ai-sdlc@ishahid": true,
     "audit@ishahid": true,
-    "detox@ishahid": true
+    "detox@ishahid": true,
+    "sast@ishahid": true
   }
 }
 ```
@@ -58,6 +62,7 @@ Refresh the marketplace to pick up new plugin versions, then uninstall any plugi
 /plugin uninstall ai-sdlc@ishahid
 /plugin uninstall audit@ishahid
 /plugin uninstall detox@ishahid
+/plugin uninstall sast@ishahid
 ```
 
 ## Repository layout
@@ -88,6 +93,14 @@ claude-plugins/
 │   ├── scripts/             # gather_local.py, build_page.py
 │   ├── references/          # checks.md, findings-schema.md
 │   ├── assets/              # page.html checklist template
+│   ├── CHANGELOG.md
+│   └── README.md
+├── sast/
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/
+│   │   ├── run/             # the /sast:run orchestrator, with references/agents and references/cwe
+│   │   └── finding-authoring/  # internal rules shared by every hunter and reviewer
+│   ├── THIRD-PARTY-NOTICES.md
 │   ├── CHANGELOG.md
 │   └── README.md
 ├── LICENSE

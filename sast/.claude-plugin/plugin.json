@@ -1,0 +1,21 @@
+{
+  "name": "sast",
+  "displayName": "sast",
+  "version": "0.1.0",
+  "description": "Read-only, multi-agent static application security testing (SAST): maps the attack surface, hunts CWE families with read-only sub-agents, adversarially reviews each finding, and reports evidence-backed findings with CVSS 4.0 scores.",
+  "author": {
+    "name": "Imran Shahid"
+  },
+  "homepage": "https://github.com/ishahid/claude-plugins/tree/main/sast",
+  "repository": "https://github.com/ishahid/claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "sast",
+    "security",
+    "static-analysis",
+    "cwe",
+    "cvss",
+    "vulnerability",
+    "code-review"
+  ]
+}
