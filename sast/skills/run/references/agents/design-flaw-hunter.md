@@ -44,8 +44,12 @@ proof of concept.
 
 ## Your answer
 
-Answer in the `finding-authoring` skill's findings layout. End with
-`## Examined`, as the answer rules set out. For design flaws:
+Write your full answer in the `finding-authoring` skill's findings layout,
+ending with `## Examined`, to a file under the run directory your brief names. In
+your reply, give only the compact index the answer rules describe — one row per
+finding (id, CWE or CWEs, `path:line`, one-line title, confidence, reachability,
+the file you wrote) — then the `## Examined` section, with no proof-of-concept
+triggers or payloads. For design flaws:
 
 - A design flaw still has a CWE, such as CWE-841 for a skipped workflow step,
   CWE-837 for a once-only action that can be repeated or CWE-602 for a rule

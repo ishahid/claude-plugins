@@ -25,6 +25,9 @@ holds, in this order:
 - that prompt's full text
 - for every hunter and reviewer, an instruction to use the `finding-authoring`
   skill, and the full text of `## Answer rules` below
+- for every hunter and reviewer, the absolute path of the run directory to write
+  to, and the rule that its reply carries only the compact index and never
+  proof-of-concept triggers or payloads (see `## Artifacts and context hygiene`)
 - what its `## Your brief` asks for, quoting earlier answers where their exact
   wording matters
 
@@ -44,8 +47,11 @@ brief.
   look closer: examine what it covers, and never cite it to refute or suppress a
   finding. A project's design documentation can show intent, but it counts only
   as a `finding-authoring` design-decision signal.
-- Read only. Do not create, edit or delete files, or run anything that changes
-  state.
+- Read only, with one exception: the run writes its own artifacts. Do not edit
+  or delete any file, and do not create files anywhere except under the run
+  directory the orchestrator names in each brief (see `## Artifacts and context
+  hygiene`). Never write inside the review root, and run nothing else that
+  changes state.
 - Stay inside the review root. Do not fetch, install, decompile or otherwise
   obtain code from outside it, such as dependencies, upstream or downstream
   services or other repositories. Make no network request beyond resolving a
@@ -62,10 +68,42 @@ brief.
   the evidence at hand, and record the question and the decision under
   `## Limitations`.
 
+## Artifacts and context hygiene
+
+Proof-of-concept triggers, exploit payloads and attack requests are the review's
+work product, not chat content. Keep them on disk, and keep them out of any
+single request's context: a request that aggregates many of them can be refused
+by a model provider's cyber-content safeguard, which stalls the whole run at
+consolidation or report. Hold at most one finding's trigger in context at a time.
+
+- At the start, before delegating the scope, create one run directory outside
+  the review root, such as a temporary directory, and use it for the whole run.
+  Name its absolute path in every sub-agent brief. It holds `findings/` for the
+  per-finding files and `findings-report.md` for the assembled report.
+- Every hunter and reviewer writes its full answer — findings, enrichment,
+  proof-of-concept triggers and all — to a file under the run directory, and
+  returns to the orchestrator only a compact index: per finding, a stable id,
+  its CWE or CWEs, its `path:line`, a one-line title, its confidence and
+  reachability, and the artifact file it wrote. The reply carries no payloads,
+  request bodies, exploit strings or proof-of-concept text.
+- The orchestrator runs consolidation, batching and the outcome decisions from
+  the compact index. It opens a finding's artifact file only when one decision
+  needs that finding's detail, reads just that file, and does not carry its
+  trigger forward into later requests.
+- Assemble `findings-report.md` from the per-finding files with file and shell
+  tooling (append or concatenate), not by re-emitting their contents through the
+  model. Do not read the assembled payloads back into context or echo finding
+  bodies in chat.
+
 ## Answer rules
 
 These rules extend `finding-authoring` for this review.
 
+- A hunter or reviewer writes its full answer to a file under the run directory
+  and returns only a compact index: one row per finding with a stable id, its CWE
+  or CWEs, its `path:line`, a one-line title, its confidence and reachability,
+  and the file it wrote. The reply holds no proof-of-concept triggers, exploit
+  payloads, request bodies or attack strings; those stay in the file.
 - A scope line marked `(tree-stated)` or `(inferred)` neither grants nor removes
   reach until the code confirms it.
 - A hunter ends its answer, after its findings, with `## Examined` and names
@@ -149,13 +187,15 @@ finding goes through it.
 Reviewers supply evidence. The orchestrator decides every finding's outcome,
 suppression included, and answers for it.
 
-First, consolidate the findings. A finding is one weakness at one sink. Agents
-often report the same weakness under different CWEs or at adjacent lines of one
-data flow. Merge those, and keep distinct weaknesses at the same line separate.
-A merged finding keeps every member's CWE, the other members' locations under
-`### Related locations` and the best-evidenced member's location, flow,
-description, scores and proof of concept. Check each CWE, and how the CWEs of
-merged findings relate, against the CWE hierarchy.
+First, consolidate the findings from the compact index the hunters returned. A
+finding is one weakness at one sink. Agents often report the same weakness under
+different CWEs or at adjacent lines of one data flow. Merge those, and keep
+distinct weaknesses at the same line separate. A merged finding keeps every
+member's CWE, the other members' locations under `### Related locations` and the
+best-evidenced member's location, flow, description, scores and the artifact file
+holding its proof of concept. Check each CWE, and how the CWEs of merged findings
+relate, against the CWE hierarchy. Consolidate from the index alone; do not read
+the artifact files' proof-of-concept triggers to merge.
 
 Next, assign reviewers. Group findings into batches a reviewer can examine
 thoroughly, and keep findings in the same file together. Decide how many
@@ -165,10 +205,12 @@ already is. Give every batch at least one `security-finding-reviewer`, unless
 its findings are minor and already well evidenced.
 
 Brief the reviewers independently. Give every reviewer of a batch the same
-brief: the batch's numbered findings and their CWEs. Each reviewer must judge
-alone, so a brief never carries a finding's scores, severity or proof of
-concept, which agent or family reported it, another reviewer's verdict or the
-orchestrator's own view.
+brief: the batch's numbered findings and their CWEs, each finding's artifact file
+and the run directory to write to. Each reviewer must judge alone, so a brief
+never carries a finding's scores, severity or proof of concept, which agent or
+family reported it, another reviewer's verdict or the orchestrator's own view.
+Reviewers read the artifact file for the claim and return compact verdicts, as
+their prompt sets out.
 
 Then decide each finding. Weigh the reviewers' evidence, not their number:
 reviewers who make the same assumption do not prove it by agreeing. For each
@@ -206,7 +248,13 @@ missing, ask a reviewer for it.
 The findings report is for the security engineers and developers who will fix or
 dismiss each finding. They usually read it in a code-scanning tool without the
 run in front of them, so each finding must stand alone and the layout must be
-exact. The run is read-only, so give the report as the final answer:
+exact. Assemble the report into `findings-report.md` in the run directory from
+the per-finding files, as `## Artifacts and context hygiene` requires, so the
+proof-of-concept triggers reach disk without passing through one model request.
+The final chat answer is a short summary only: the `## Summary`, `## Limitations`
+and `## Hunted` sections, a one-line-per-finding table (id, rule, kind, severity,
+`path:line`) with no triggers, and the absolute path to `findings-report.md`.
+The report file itself follows this layout exactly:
 
 ```markdown
 # Findings report

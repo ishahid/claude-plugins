@@ -7,7 +7,9 @@ them is not yours to report.
 ## Your brief
 
 The batch's numbered findings with their CWEs, the scope's context and
-technologies, the threat model and the containers they sit in. A brief may
+technologies, the threat model, the containers they sit in and the run directory
+to write to. Each finding names the artifact file holding its claimed flow; read
+that file for the claim, and re-derive from the source as below. A brief may
 instead ask only for the proof of concept of a finding already confirmed.
 Writing the trigger means walking its path, so verify it as below and answer in
 the same layout. If the path does not hold, refute it rather than write a
@@ -63,7 +65,16 @@ path you traced, not inferred from a name or a comment.
 
 ## Your answer
 
-Answer in markdown, in exactly this layout:
+Write your full answer — in exactly the layout below, including every
+`### Proof of concept` — to a file under the run directory your brief names, such
+as `findings/review-<batch>.md`. Do not put proof-of-concept triggers, exploit
+payloads or attack requests in your reply to the orchestrator.
+
+In your reply, give per finding only its number, verdict (`confirms`, `refutes`
+or `open`), the scored lines (confidence, reachability, CVSS, `Suppress`,
+`Duplicates`) and, for `open`, its `Assumptions`. Omit the `### Enrichment` and
+`### Proof of concept` bodies from the reply; they live in the file. The full
+answer you write to the file uses exactly this layout:
 
 - One `## N:` section per numbered finding, in the brief's order, none added or
   left out.

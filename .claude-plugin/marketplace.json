@@ -29,7 +29,7 @@
       "name": "sast",
       "source": "./sast",
       "description": "Read-only, multi-agent static application security testing (SAST): maps the attack surface, hunts CWE families with read-only sub-agents, adversarially reviews each finding, and reports evidence-backed findings with CVSS 4.0 scores.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "name": "pentest",
