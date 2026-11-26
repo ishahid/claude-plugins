@@ -48,8 +48,12 @@ area clean, also read the build and CI scripts that cover it.
 
 ## Your answer
 
-Answer in the `finding-authoring` skill's findings layout. End with
-`## Examined`, as the answer rules set out. For malicious code:
+Write your full answer in the `finding-authoring` skill's findings layout,
+ending with `## Examined`, to a file under the run directory your brief names. In
+your reply, give only the compact index the answer rules describe — one row per
+finding (id, CWE or CWEs, `path:line`, one-line title, confidence, reachability,
+the file you wrote) — then the `## Examined` section, with no proof-of-concept
+triggers or payloads. For malicious code:
 
 - Under `### Detail`, state:
   - the intent, with its grounds: malicious (shown by concealment, environmental

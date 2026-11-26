@@ -18,7 +18,11 @@ candidate before you record it.
 
 ## Your answer
 
-Answer in the `finding-authoring` skill's findings layout. End with
-`## Examined`, as the answer rules set out. If you come across a design or logic
+Write your full answer in the `finding-authoring` skill's findings layout,
+ending with `## Examined`, to a file under the run directory your brief names. In
+your reply, give only the compact index the answer rules describe — one row per
+finding (id, CWE or CWEs, `path:line`, one-line title, confidence, reachability,
+the file you wrote) — then the `## Examined` section, with no proof-of-concept
+triggers or payloads. If you come across a design or logic
 flaw, or deliberately malicious code, report it like any other finding: a
 duplicate costs less than a gap.

@@ -38,8 +38,16 @@ weakness.
 
 ## Your answer
 
-Answer in the `finding-authoring` skill's findings layout. End with
-`## Examined`, as the answer rules set out.
+Write your full answer — every finding in the `finding-authoring` skill's
+findings layout, including each proof-of-concept trigger, followed by
+`## Examined` — to a file under the run directory your brief names, such as
+`findings/<family>-<n>.md`. Do not put proof-of-concept triggers, exploit
+payloads or attack requests in your reply to the orchestrator.
+
+In your reply, give only a compact index: one row per finding with a stable id,
+its CWE or CWEs, its `path:line`, a one-line title, its confidence and
+reachability, and the file you wrote. Then give the `## Examined` section (it
+carries no payloads) so the orchestrator can treat that code as examined.
 
 Where a finding combines with a weakness of another class for greater impact,
 say so under `### Detail`.
