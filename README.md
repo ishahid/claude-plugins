@@ -10,6 +10,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) plugin marketplace.
 | [audit](audit/) | `/audit:frontend`, `/audit:backend`, `/audit:infra`, `/audit:tests`, `/audit:e2e`, `/audit:assets`, `/audit:all` | Read-only, evidence-based codebase audits with severity-ranked findings. |
 | [detox](detox/) | `/detox:run` | Audit and declutter a Claude setup (interface, memory, skills, connectors, scheduled tasks) from one checklist page. Applies only what you tick. |
 | [sast](sast/) | `/sast:run` | Read-only, multi-agent static application security testing with evidence-backed, CVSS 4.0-scored findings. |
+| [pentest](pentest/) | `/pentest:run` | Safe-by-default, tool-orchestrated web and network penetration testing with CVSS 4.0-scored findings, risk ratings and remediation. |
 
 ## Installation
 
@@ -21,6 +22,7 @@ Add the marketplace once, then install any plugin from it as `<plugin>@ishahid`.
 /plugin install audit@ishahid
 /plugin install detox@ishahid
 /plugin install sast@ishahid
+/plugin install pentest@ishahid
 ```
 
 Or from your shell:
@@ -31,6 +33,7 @@ claude plugin install ai-sdlc@ishahid
 claude plugin install audit@ishahid
 claude plugin install detox@ishahid
 claude plugin install sast@ishahid
+claude plugin install pentest@ishahid
 ```
 
 ### For a whole team
@@ -48,7 +51,8 @@ Add this to a project's `.claude/settings.json` so everyone who opens it is offe
     "ai-sdlc@ishahid": true,
     "audit@ishahid": true,
     "detox@ishahid": true,
-    "sast@ishahid": true
+    "sast@ishahid": true,
+    "pentest@ishahid": true
   }
 }
 ```
@@ -63,6 +67,7 @@ Refresh the marketplace to pick up new plugin versions, then uninstall any plugi
 /plugin uninstall audit@ishahid
 /plugin uninstall detox@ishahid
 /plugin uninstall sast@ishahid
+/plugin uninstall pentest@ishahid
 ```
 
 ## Repository layout
@@ -101,6 +106,13 @@ claude-plugins/
 │   │   ├── run/             # the /sast:run orchestrator, with references/agents and references/cwe
 │   │   └── finding-authoring/  # internal rules shared by every hunter and reviewer
 │   ├── THIRD-PARTY-NOTICES.md
+│   ├── CHANGELOG.md
+│   └── README.md
+├── pentest/
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/
+│   │   ├── run/             # the /pentest:run orchestrator, with references/agents, references/web and references/net
+│   │   └── pentest-finding-authoring/  # internal rules shared by the run and its sub-agents
 │   ├── CHANGELOG.md
 │   └── README.md
 ├── LICENSE
